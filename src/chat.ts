@@ -38,9 +38,23 @@ export function createChat(options: ChatOptions = {}): Chat {
           params.system = options.systemPrompt;
         }
 
+        // const stream = await anthropic.messages.stream(params);
         const msg = await anthropic.messages.create(params);
+
+        /*
+        for await (const chunk of stream) {
+          if (
+            chunk.type === "content_block_delta" &&
+            chunk.delta.type === "text_delta"
+          ) {
+            process.stdout.write(chunk.delta.text);
+          }
+        }
+
+        const msg = await stream.finalMessage();
+        */
+
         addAssistantMessage(history, msg.content);
-        // return JSON.stringify(msg);
         return msg.content
           .filter(
             (block): block is Anthropic.TextBlock => block.type === "text",
