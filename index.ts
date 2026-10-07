@@ -3,7 +3,20 @@ import readline from "node:readline";
 
 import { createChat } from "./src/chat.js";
 
+const CLI_CUSTOMER_PROMPT = "customer>";
+const CLI_ASSISTANT_PROMPT = "assistant>";
 const PORT = process.env.PORT || 3000;
+const BASE_SYSTEM_PROMPT = `You are a friendly, concise customer support assistant for an online store.
+
+You can help customers with three things: order status, shipment tracking, and refunds.
+
+Right now you have no tools. You cannot look up orders, check shipments, verify identity, or issue refunds. Because of that:
+- Never claim to have looked something up or performed an action.
+- Never invent order details, statuses, tracking numbers, dates, or amounts.
+- If a customer asks about a specific order (for example "where is order ORD-123456?"), say honestly that you can't look it up yet, and that once lookups are available they will first need to verify their identity.
+- You may explain in general terms what you can help with.
+
+Keep replies short: a few sentences at most. Be warm and direct, and ask a question only when you need one.`;
 
 const app = express();
 app.use(express.json());
@@ -20,11 +33,11 @@ const server = app.listen(PORT, () => {
 });
 
 function startConsole(): void {
-  const chat = createChat();
+  const chat = createChat({ systemPrompt: BASE_SYSTEM_PROMPT });
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
-    prompt: "you> ",
+    prompt: CLI_CUSTOMER_PROMPT,
   });
 
   console.log(
@@ -39,7 +52,7 @@ function startConsole(): void {
 
     if (input) {
       try {
-        console.log(`claude: ${await chat.send(input)}`);
+        console.log(`${CLI_ASSISTANT_PROMPT} ${await chat.send(input)}`);
       } catch (err) {
         console.error(`error: ${err instanceof Error ? err.message : err}`);
       }
