@@ -26,6 +26,16 @@ An e-commerce customer support assistant. Layers are deliberately separated so n
 
 No guardrails (e.g. customer identity verification) exist on tools yet; they are planned to be added later.
 
+## Git hooks & commit messages
+
+Husky hooks are installed by `npm install` (`prepare` script):
+
+- `pre-commit` — `lint-staged`: `eslint --fix` + `prettier --write` on staged files.
+- `commit-msg` — `commitlint` (`commitlint.config.mjs`, extends `@commitlint/config-conventional`). Strict Conventional Commits; earlier history is not checked.
+- `pre-push` — `npm run typecheck`.
+
+Commit format: `<type>(<optional scope>): <description>`, then optional body and footer(s). Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`. Breaking changes use `!` after the type/scope (`feat(api)!: ...`) and/or a `BREAKING CHANGE: ...` footer. Examples: `feat(cart): add promo code validation`, `build(deps): bump webpack from 5.88 to 5.90`, `ci: run lint on pull requests`.
+
 ## Conventions
 
 - TypeScript, strict, `module: nodenext` with CommonJS package type. Relative imports use the output extension (`"./src/chat.js"`), which resolves to the `.ts` file under both `tsc` and `tsx`.
