@@ -6,7 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - `npm start` — run `index.ts` via `tsx`, loading `.env` (missing `.env` is tolerated). Starts the Express server and the interactive console.
 - `npm run dev` — same, restarting on file changes.
-- `npm run typecheck` — `tsc --noEmit`. Run this after edits; there is no linter.
+- `npm run typecheck` — `tsc --noEmit`. Run this after edits.
+- `npm run lint` / `npm run lint:fix` — ESLint (flat config in `eslint.config.mjs`, `typescript-eslint` recommended + `eslint-config-prettier`). TypeScript is pinned to `~6.0.0` because `typescript-eslint` doesn't support TS 7 yet; revisit when it does.
 - `npm run build` — compile to `dist/` (gitignored). Not needed for `npm start`.
 - No test framework yet (`npm test` is the npm placeholder), so there is no single-test command.
 
